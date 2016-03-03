@@ -9,7 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.maxmommersteeg.max.android_final.dummy.DummyContent;
+import com.maxmommersteeg.max.android_final.Model.Person;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * A fragment representing a single Person detail screen.
@@ -24,10 +29,10 @@ public class PersonDetailFragment extends Fragment {
      */
     public static final String ARG_ITEM_ID = "item_id";
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    private DummyContent.DummyItem mItem;
+    /*
+    * Used data object
+    */
+    private Person person;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -40,17 +45,32 @@ public class PersonDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+        //Check if we received an objectid
+        if(!getArguments().containsKey(ARG_ITEM_ID))
+            return;
 
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
-            }
+        //Load person by id here
+        Person p = new Person();
+        p.setFirstName("Max");
+        p.setLastName("Mommersteeg");
+        person = p;
+
+        //Set birthdate
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date d = sdf.parse("01/02/1994");
+            p.setBirthDate(d);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        //Get this activity
+        Activity activity = this.getActivity();
+        //Get app bar layout
+        CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+        //Null check
+        if (appBarLayout != null) {
+            //Set its title
+            appBarLayout.setTitle(person.getFullName());
         }
     }
 
@@ -59,11 +79,11 @@ public class PersonDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.person_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.person_detail)).setText(mItem.details);
-        }
+        if(person == null)
+            return rootView;
 
+        //Show person detail data
+        ((TextView) rootView.findViewById(R.id.person_fullname)).setText(person.getFullName());
         return rootView;
     }
 }

@@ -15,9 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.maxmommersteeg.max.android_final.Model.Person;
 
-import com.maxmommersteeg.max.android_final.dummy.DummyContent;
-
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,10 +37,19 @@ public class PersonListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
 
+    private ArrayList<Person> persons;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_list);
+
+        //Create some persons
+        ArrayList personlist = new ArrayList<Person>();
+        personlist.add(new Person() {{ setPersonId(1); setFirstName("Max"); setLastName("Mommersteeg");}});
+        personlist.add(new Person() {{ setPersonId(2); setFirstName("Anouk"); setLastName("Mommersteeg");}});
+        personlist.add(new Person() {{ setPersonId(3); setFirstName("Tim"); setLastName("Mommersteeg");}});
+        persons = personlist;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -49,14 +59,15 @@ public class PersonListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Snackbar.make(view, "Plaats eigen actie hier", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
 
         View recyclerView = findViewById(R.id.person_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
+
+        System.out.println("Setup recycler view");
 
         if (findViewById(R.id.person_detail_container) != null) {
             // The detail container view will be present only in the
@@ -68,16 +79,16 @@ public class PersonListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(persons));
     }
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<Person> mPersons;
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
-            mValues = items;
+        public SimpleItemRecyclerViewAdapter(List<Person> items) {
+            mPersons = items;
         }
 
         @Override
@@ -89,16 +100,16 @@ public class PersonListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mPerson = mPersons.get(position);
+            holder.mIdView.setText(String.valueOf(mPersons.get(position).getPersonId()));
+            holder.mContentView.setText(mPersons.get(position).getFirstName());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(PersonDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        arguments.putString(PersonDetailFragment.ARG_ITEM_ID, String.valueOf(holder.mPerson.getPersonId()));
                         PersonDetailFragment fragment = new PersonDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -107,7 +118,7 @@ public class PersonListActivity extends AppCompatActivity {
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, PersonDetailActivity.class);
-                        intent.putExtra(PersonDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        intent.putExtra(PersonDetailFragment.ARG_ITEM_ID, holder.mPerson.getPersonId());
 
                         context.startActivity(intent);
                     }
@@ -116,15 +127,13 @@ public class PersonListActivity extends AppCompatActivity {
         }
 
         @Override
-        public int getItemCount() {
-            return mValues.size();
-        }
+        public int getItemCount() { return mPersons.size(); }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
+            public Person mPerson;
 
             public ViewHolder(View view) {
                 super(view);
