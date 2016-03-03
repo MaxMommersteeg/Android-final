@@ -84,6 +84,7 @@ public class PersonDetailFragment extends Fragment {
 
         //Show person detail data
         ((TextView) rootView.findViewById(R.id.person_fullname)).setText(person.getFullName());
+        ((TextView) rootView.findViewById(R.id.person_birthdate)).setText(String.valueOf(person.getBirthDate()));
         return rootView;
     }
 }
