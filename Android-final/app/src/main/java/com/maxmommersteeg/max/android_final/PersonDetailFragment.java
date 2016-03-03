@@ -27,7 +27,7 @@ public class PersonDetailFragment extends Fragment {
      * The fragment argument representing the item ID that this fragment
      * represents.
      */
-    public static final String ARG_ITEM_ID = "item_id";
+    public static final String ARG_PERSON_ID = "PERSON_ID";
 
     /*
     * Used data object
@@ -39,17 +39,22 @@ public class PersonDetailFragment extends Fragment {
      * fragment (e.g. upon screen orientation changes).
      */
     public PersonDetailFragment() {
+        // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Check if we received an objectid
-        if(!getArguments().containsKey(ARG_ITEM_ID))
+        //Check if arguments exist
+        if(getArguments() == null)
+            return;
+        //Check if we received an objectid for the person
+        if(!getArguments().containsKey(ARG_PERSON_ID))
             return;
 
         //Load person by id here
+        //TODO: hardcoded to API
         Person p = new Person();
         p.setFirstName("Max");
         p.setLastName("Mommersteeg");

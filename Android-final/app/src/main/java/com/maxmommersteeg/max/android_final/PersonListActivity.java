@@ -44,30 +44,27 @@ public class PersonListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_list);
 
-        //Create some persons
-        ArrayList personlist = new ArrayList<Person>();
+        //TODO: Change for API instead of hardcoded
+        //Create Persons
+        ArrayList<Person> personlist = new ArrayList<>();
         personlist.add(new Person() {{ setPersonId(1); setFirstName("Max"); setLastName("Mommersteeg");}});
         personlist.add(new Person() {{ setPersonId(2); setFirstName("Anouk"); setLastName("Mommersteeg");}});
         personlist.add(new Person() {{ setPersonId(3); setFirstName("Tim"); setLastName("Mommersteeg");}});
+
+        //Set Locations
+        personlist.get(0).setCurrentLocation(51.692512, 5.177475);
+        personlist.get(1).setCurrentLocation(52.692512, 6.177475);
+        personlist.get(2).setCurrentLocation(53.692512, 7.177475);
+
         persons = personlist;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Plaats eigen actie hier", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            }
-        });
-
         View recyclerView = findViewById(R.id.person_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
-
-        System.out.println("Setup recycler view");
 
         if (findViewById(R.id.person_detail_container) != null) {
             // The detail container view will be present only in the
@@ -109,7 +106,7 @@ public class PersonListActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(PersonDetailFragment.ARG_ITEM_ID, String.valueOf(holder.mPerson.getPersonId()));
+                        arguments.putString(PersonDetailFragment.ARG_PERSON_ID, String.valueOf(holder.mPerson.getPersonId()));
                         PersonDetailFragment fragment = new PersonDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -118,7 +115,7 @@ public class PersonListActivity extends AppCompatActivity {
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, PersonDetailActivity.class);
-                        intent.putExtra(PersonDetailFragment.ARG_ITEM_ID, holder.mPerson.getPersonId());
+                        intent.putExtra(PersonDetailFragment.ARG_PERSON_ID, holder.mPerson.getPersonId());
 
                         context.startActivity(intent);
                     }

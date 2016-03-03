@@ -7,6 +7,14 @@ public class Location {
     private Double latitude;
     private Double longitude;
 
+
+    /*
+    * Empty constructor
+    */
+    public Location() {
+
+    }
+
     public Location(Double latitude, Double longitude) {
         setLatitude(latitude);
         setLongitude(longitude);
