@@ -12,7 +12,7 @@ import com.maxmommersteeg.max.android_final.Model.Location;
 
 public class PersonMapFragment extends Fragment {
 
-    private static final String ARG_LOCATION_ID = "LOCATION_ID";
+    public static final String ARG_PERSON_ID = "ARG_PERSON_ID";
 
     private Location location;
 
@@ -23,6 +23,8 @@ public class PersonMapFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +33,10 @@ public class PersonMapFragment extends Fragment {
         if (getArguments() == null)
             return;
         //Check if we received an objectid for the location
-        if(!getArguments().containsKey(ARG_LOCATION_ID))
+        if(!getArguments().containsKey(ARG_PERSON_ID))
             return;
+
+
 
         //Load location by id here
         //TODO: hardcoded to API

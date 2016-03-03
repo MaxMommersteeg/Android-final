@@ -2,17 +2,10 @@ package com.maxmommersteeg.max.android_final;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
-
-import com.maxmommersteeg.max.android_final.PersonDetailFragment;
-import com.maxmommersteeg.max.android_final.PersonListActivity;
-import com.maxmommersteeg.max.android_final.R;
 
 /**
  * An activity representing a single Person detail screen. This
@@ -34,7 +27,7 @@ public class PersonMapActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
+        
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
         // (e.g. when rotating the screen from portrait to landscape).
@@ -44,17 +37,17 @@ public class PersonMapActivity extends AppCompatActivity {
         //
         // http://developer.android.com/guide/components/fragments.html
         //
-        if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putString(PersonDetailFragment.ARG_PERSON_ID, getIntent().getStringExtra(PersonDetailFragment.ARG_PERSON_ID));
-            PersonDetailFragment pdf = new PersonDetailFragment();
-            pdf.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.person_detail_container, pdf)
-                    .commit();
-        }
+//        if (savedInstanceState == null) {
+//            // Create the detail fragment and add it to the activity
+//            // using a fragment transaction.
+//            Bundle arguments = new Bundle();
+//            arguments.putString(PersonMapFragment.ARG_PERSON_ID, getIntent().getStringExtra(PersonMapFragment.ARG_PERSON_ID));
+//            PersonMapFragment pmf = new PersonMapFragment();
+//            pmf.setArguments(arguments);
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.person_detail_container, pmf)
+//                    .commit();
+//        }
     }
 
     @Override

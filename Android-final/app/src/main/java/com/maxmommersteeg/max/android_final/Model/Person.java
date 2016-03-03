@@ -57,7 +57,7 @@ public class Person {
     }
 
     public void setBirthDate(Date birthdate) {
-        if(new Date().after(birthdate))
+        if(new Date().before(birthdate))
             return;
         this.birthDate = birthdate;
     }

@@ -2,4 +2,5 @@
     <string name="app_name">Android-final</string>
     <string name="title_person_detail">Person Detail</string>
     <string name="description">Description</string>
+    <string name="location">Location</string>
 </resources>

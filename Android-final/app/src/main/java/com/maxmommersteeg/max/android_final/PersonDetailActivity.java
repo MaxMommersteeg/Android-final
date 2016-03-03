@@ -1,5 +1,6 @@
 package com.maxmommersteeg.max.android_final;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -28,9 +29,12 @@ public class PersonDetailActivity extends AppCompatActivity {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Dit is een actie", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+                Context context = v.getContext();
+                Intent intent = new Intent(context, PersonMapActivity.class);
+                intent.putExtra(PersonMapFragment.ARG_PERSON_ID, getIntent().getStringExtra(PersonMapFragment.ARG_PERSON_ID));
+
+                context.startActivity(intent);
             }
         });
 

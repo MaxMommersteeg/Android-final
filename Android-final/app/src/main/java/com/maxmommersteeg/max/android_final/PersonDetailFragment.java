@@ -27,7 +27,7 @@ public class PersonDetailFragment extends Fragment {
      * The fragment argument representing the item ID that this fragment
      * represents.
      */
-    public static final String ARG_PERSON_ID = "PERSON_ID";
+    public static final String ARG_PERSON_ID = "ARG_PERSON_ID";
 
     /*
     * Used data object
@@ -58,7 +58,6 @@ public class PersonDetailFragment extends Fragment {
         Person p = new Person();
         p.setFirstName("Max");
         p.setLastName("Mommersteeg");
-        person = p;
 
         //Set birthdate
         try {
@@ -68,6 +67,9 @@ public class PersonDetailFragment extends Fragment {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        p.setCurrentLocation(51.692512, 5.177475);
+        person = p;
+
         //Get this activity
         Activity activity = this.getActivity();
         //Get app bar layout
@@ -90,6 +92,13 @@ public class PersonDetailFragment extends Fragment {
         //Show person detail data
         ((TextView) rootView.findViewById(R.id.person_fullname)).setText(person.getFullName());
         ((TextView) rootView.findViewById(R.id.person_birthdate)).setText(String.valueOf(person.getBirthDate()));
+
+        if(person.getCurrentLocation() == null)
+            return rootView;
+
+        ((TextView) rootView.findViewById(R.id.person_location_latitude)).setText(String.valueOf(person.getCurrentLocation().getLatitude()));
+        ((TextView) rootView.findViewById(R.id.person_location_longitude)).setText(String.valueOf(person.getCurrentLocation().getLongitude()));
+
         return rootView;
     }
 }
