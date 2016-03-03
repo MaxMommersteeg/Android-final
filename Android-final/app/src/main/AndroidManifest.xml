@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.maxmommersteeg.max.android_final">
-
     <application>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -40,5 +39,4 @@
                 android:value="com.maxmommersteeg.max.android_final.PersonDetailActivity" />
         </activity>
     </application>
-
 </manifest>

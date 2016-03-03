@@ -18,7 +18,7 @@ public class PersonMapActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.person_map);
+        setContentView(R.layout.activity_person_map);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
@@ -27,7 +27,7 @@ public class PersonMapActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        
+
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
         // (e.g. when rotating the screen from portrait to landscape).
@@ -37,17 +37,17 @@ public class PersonMapActivity extends AppCompatActivity {
         //
         // http://developer.android.com/guide/components/fragments.html
         //
-//        if (savedInstanceState == null) {
-//            // Create the detail fragment and add it to the activity
-//            // using a fragment transaction.
-//            Bundle arguments = new Bundle();
-//            arguments.putString(PersonMapFragment.ARG_PERSON_ID, getIntent().getStringExtra(PersonMapFragment.ARG_PERSON_ID));
-//            PersonMapFragment pmf = new PersonMapFragment();
-//            pmf.setArguments(arguments);
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.person_detail_container, pmf)
-//                    .commit();
-//        }
+        if (savedInstanceState == null) {
+            // Create the detail fragment and add it to the activity
+            // using a fragment transaction.
+            Bundle arguments = new Bundle();
+            arguments.putString(PersonMapFragment.ARG_PERSON_ID, getIntent().getStringExtra(PersonMapFragment.ARG_PERSON_ID));
+            PersonMapFragment pmf = new PersonMapFragment();
+            pmf.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.person_map_container, pmf)
+                    .commit();
+        }
     }
 
     @Override
