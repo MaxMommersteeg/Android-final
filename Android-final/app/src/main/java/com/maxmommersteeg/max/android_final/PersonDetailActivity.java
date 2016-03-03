@@ -10,6 +10,9 @@ import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.maxmommersteeg.max.android_final.Model.Person;
 
 /**
  * An activity representing a single Person detail screen. This
@@ -19,6 +22,8 @@ import android.view.MenuItem;
  */
 public class PersonDetailActivity extends AppCompatActivity {
 
+    private Person person;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,13 +31,22 @@ public class PersonDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
+        //Retrieve personId
+        Integer personId = getIntent().getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1);
+        //Check if the id is valid
+        if(personId == -1) {
+            Toast.makeText(this, "Invalid Person ID", Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
                 Intent intent = new Intent(context, PersonMapActivity.class);
-                intent.putExtra(PersonMapFragment.ARG_PERSON_ID, getIntent().getStringExtra(PersonMapFragment.ARG_PERSON_ID));
+                intent.putExtra(PersonMapFragment.ARG_PERSON_ID, getIntent().getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1));
 
                 context.startActivity(intent);
             }
@@ -57,7 +71,7 @@ public class PersonDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(PersonDetailFragment.ARG_PERSON_ID, getIntent().getStringExtra(PersonDetailFragment.ARG_PERSON_ID));
+            arguments.putInt(PersonDetailFragment.ARG_PERSON_ID, getIntent().getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1));
             PersonDetailFragment pdf = new PersonDetailFragment();
             pdf.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

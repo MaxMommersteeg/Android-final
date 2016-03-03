@@ -28,6 +28,10 @@ public class PersonMapActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        Intent receivedIntent = getIntent();
+        int personId = receivedIntent.getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1);
+        System.out.println("PMA: " + String.valueOf(personId));
+
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
         // (e.g. when rotating the screen from portrait to landscape).
@@ -41,7 +45,7 @@ public class PersonMapActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(PersonMapFragment.ARG_PERSON_ID, getIntent().getStringExtra(PersonMapFragment.ARG_PERSON_ID));
+            arguments.putInt(PersonMapFragment.ARG_PERSON_ID, getIntent().getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1));
             PersonMapFragment pmf = new PersonMapFragment();
             pmf.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
