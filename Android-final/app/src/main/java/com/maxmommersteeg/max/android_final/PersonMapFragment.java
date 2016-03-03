@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -25,6 +26,7 @@ public class PersonMapFragment extends Fragment implements
     private Person person;
 
     private LatLng currentLatLng;
+    private SupportMapFragment googleMap;
 
     public PersonMapFragment() {
         // Required empty public constructor
@@ -63,11 +65,10 @@ public class PersonMapFragment extends Fragment implements
         View rootView = inflater.inflate(R.layout.person_map, container, false);
 
         //Get Google map
-        SupportMapFragment smf = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.googlemap);
-        if(smf == null)
+        googleMap = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.googlemap);
+        if(googleMap == null)
             return rootView;
-
-        smf.getMapAsync(this);
+        googleMap.getMapAsync(this);
 
         return rootView;
     }
@@ -77,5 +78,11 @@ public class PersonMapFragment extends Fragment implements
         if(map == null)
             return;
         map.addMarker(new MarkerOptions().position(currentLatLng).title(person.getFullName()));
+        
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15));
+        // Zoom in, animating the camera.
+        map.animateCamera(CameraUpdateFactory.zoomIn());
+        // Zoom out to zoom level 10, animating with a duration of 2 seconds.
+        map.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
     }
 }
