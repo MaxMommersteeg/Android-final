@@ -13,15 +13,24 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="5dp"
+        android:paddingTop="20dp"
         android:paddingBottom="20dp"
         android:paddingLeft="16dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/icon"
+        android:src="@mipmap/ic_marker"
+        />
 
     <TextView
         android:id="@+id/id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:paddingLeft="10dp"
+        android:layout_toRightOf="@+id/icon"/>
 
     <TextView
         android:id="@+id/content"
@@ -30,6 +39,22 @@
         android:textAppearance="?attr/textAppearanceListItem"
         android:paddingLeft="10dp"
         android:layout_toRightOf="@+id/id"/>
+
+        <TextView
+            android:id="@+id/latitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:paddingLeft="10dp"
+            android:layout_toRightOf="@+id/content"/>
+
+        <TextView
+            android:id="@+id/Longitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:paddingLeft="10dp"
+            android:layout_toRightOf="@+id/latitude"/>
 
     </RelativeLayout>
 

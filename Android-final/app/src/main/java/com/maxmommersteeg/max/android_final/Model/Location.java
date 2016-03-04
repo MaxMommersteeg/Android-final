@@ -1,19 +1,15 @@
 package com.maxmommersteeg.max.android_final.Model;
 
+import android.content.Context;
+import android.location.Geocoder;
+
 /**
  * Created by Max on 3-3-2016.
  */
 public class Location {
     private Double latitude;
     private Double longitude;
-
-
-    /*
-    * Empty constructor
-    */
-    public Location() {
-
-    }
+    private String city;
 
     public Location(Double latitude, Double longitude) {
         setLatitude(latitude);

@@ -2,6 +2,7 @@ package com.maxmommersteeg.max.android_final;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -36,8 +37,18 @@ public class PersonListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
-
     private ArrayList<Person> persons;
+
+    public static final String PREFERENCE_FILE = "PREFERENCE_FILE";
+
+    private SharedPreferences settings;
+    private SharedPreferences.Editor settingEditor;
+
+    public PersonListActivity() {
+        //Initliaze private variables
+//        settings = getSharedPreferences(PREFERENCE_FILE, 0);
+//        settingEditor = settings.edit();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +111,8 @@ public class PersonListActivity extends AppCompatActivity {
             holder.mPerson = mPersons.get(position);
             holder.mIdView.setText(String.valueOf(mPersons.get(position).getPersonId()));
             holder.mContentView.setText(mPersons.get(position).getFirstName());
-
+            holder.mLatitudeView.setText(String.valueOf(mPersons.get(position).getCurrentLocation().getLatitude()));
+            holder.mLongitudeView.setText(String.valueOf(mPersons.get(position).getCurrentLocation().getLongitude()));
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -130,6 +142,9 @@ public class PersonListActivity extends AppCompatActivity {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
+            public final TextView mLatitudeView;
+            public final TextView mLongitudeView;
+
             public Person mPerson;
 
             public ViewHolder(View view) {
@@ -137,6 +152,8 @@ public class PersonListActivity extends AppCompatActivity {
                 mView = view;
                 mIdView = (TextView) view.findViewById(R.id.id);
                 mContentView = (TextView) view.findViewById(R.id.content);
+                mLatitudeView = (TextView) view.findViewById(R.id.latitude);
+                mLongitudeView = (TextView) view.findViewById(R.id.Longitude);
             }
 
             @Override

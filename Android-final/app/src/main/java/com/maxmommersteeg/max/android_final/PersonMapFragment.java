@@ -78,7 +78,7 @@ public class PersonMapFragment extends Fragment implements
         if(map == null)
             return;
         map.addMarker(new MarkerOptions().position(currentLatLng).title(person.getFullName()));
-        
+
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15));
         // Zoom in, animating the camera.
         map.animateCamera(CameraUpdateFactory.zoomIn());
