@@ -80,7 +80,7 @@ public class Person {
     }
 
     public String getFullName() {
-        if(middleName.equals(null) || middleName.isEmpty())
+        if(middleName == null || middleName.isEmpty())
             return firstName + " " + lastName;
         return firstName + " " + middleName + " " + lastName;
     }

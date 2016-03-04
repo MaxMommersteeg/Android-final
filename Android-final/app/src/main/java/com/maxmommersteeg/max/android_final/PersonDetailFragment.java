@@ -69,16 +69,6 @@ public class PersonDetailFragment extends Fragment {
         }
         p.setCurrentLocation(51.692512, 5.177475);
         person = p;
-
-        //Get this activity
-        Activity activity = this.getActivity();
-        //Get app bar layout
-        CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-        //Null check
-        if (appBarLayout != null) {
-            //Set its title
-            appBarLayout.setTitle(person.getFullName());
-        }
     }
 
     @Override
@@ -98,6 +88,14 @@ public class PersonDetailFragment extends Fragment {
 
         ((TextView) rootView.findViewById(R.id.person_location_latitude)).setText(String.valueOf(person.getCurrentLocation().getLatitude()));
         ((TextView) rootView.findViewById(R.id.person_location_longitude)).setText(String.valueOf(person.getCurrentLocation().getLongitude()));
+
+        //Get this activity
+        Activity activity = this.getActivity();
+        //Get app bar layout
+        CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+        if(appBarLayout != null) {
+            appBarLayout.setTitle(person.getFullName());
+        }
 
         return rootView;
     }
