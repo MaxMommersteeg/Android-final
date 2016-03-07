@@ -3,4 +3,6 @@
     <string name="title_person_detail">Person Detail</string>
     <string name="description">Description</string>
     <string name="location">Location</string>
+    <string name="openmapbutton">Kaart</string>
+    <string name="openmapbuttontext">Toon op kaart</string>
 </resources>

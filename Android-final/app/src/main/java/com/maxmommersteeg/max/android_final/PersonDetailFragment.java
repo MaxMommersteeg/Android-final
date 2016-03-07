@@ -11,10 +11,8 @@ import android.widget.TextView;
 
 import com.maxmommersteeg.max.android_final.Model.Person;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * A fragment representing a single Person detail screen.
