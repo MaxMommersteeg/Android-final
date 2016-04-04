@@ -1,14 +1,20 @@
-package com.maxmommersteeg.max.android_final.Model;
+package com.maxmommersteeg.max.android_final.model;
 
-import android.content.Context;
-import android.location.Geocoder;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Max on 3-3-2016.
  */
 public class Location {
+    @SerializedName("latitude")
+    @Expose
     private Double latitude;
+    @SerializedName("longitude")
+    @Expose
     private Double longitude;
+    @SerializedName("city")
+    @Expose
     private String city;
 
     public Location(Double latitude, Double longitude) {

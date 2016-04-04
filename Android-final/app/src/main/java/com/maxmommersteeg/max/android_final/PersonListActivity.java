@@ -1,24 +1,27 @@
 package com.maxmommersteeg.max.android_final;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.maxmommersteeg.max.android_final.Model.Person;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.maxmommersteeg.max.android_final.app.VolleyService;
+import com.maxmommersteeg.max.android_final.model.Person;
+import com.maxmommersteeg.max.android_final.toolbox.GsonRequest;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,12 +58,53 @@ public class PersonListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_list);
 
+        // Get persons using API (Volley)
+        VolleyService.init(getApplicationContext());
+        RequestQueue queue = VolleyService.getRequestQueue();
+        GsonRequest<Person[]> personRequest = new GsonRequest<Person[]>(
+                Request.Method.GET,
+                "https://api.myjson.com/bins/2orte",
+                Person[].class,
+                new Response.Listener<Person[]>() {
+                    @Override
+                    public void onResponse(Person[] response) {
+                        System.out.println("Success");
+                        for(Integer i = 0; i < response.length; i++) {
+                            System.out.println(response[i].getFirstName());
+                            System.out.println(response[i].getLastName());
+                            System.out.println(response[i].getFullName());
+                            System.out.println(response[i].getBirthDate());
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Error");
+                System.out.println(error.getMessage());
+            }
+        }
+        );
+        queue.add(personRequest);
+
+
         //TODO: Change for API instead of hardcoded
         //Create Persons
         ArrayList<Person> personlist = new ArrayList<>();
-        personlist.add(new Person() {{ setPersonId(1); setFirstName("Max"); setLastName("Mommersteeg");}});
-        personlist.add(new Person() {{ setPersonId(2); setFirstName("Anouk"); setLastName("Mommersteeg");}});
-        personlist.add(new Person() {{ setPersonId(3); setFirstName("Tim"); setLastName("Mommersteeg");}});
+        personlist.add(new Person() {{
+            setPersonId(1);
+            setFirstName("Max");
+            setLastName("Mommersteeg");
+        }});
+        personlist.add(new Person() {{
+            setPersonId(2);
+            setFirstName("Anouk");
+            setLastName("Mommersteeg");
+        }});
+        personlist.add(new Person() {{
+            setPersonId(3);
+            setFirstName("Tim");
+            setLastName("Mommersteeg");
+        }});
 
         //Set Locations
         personlist.get(0).setCurrentLocation(51.692512, 5.177475);
@@ -88,6 +132,31 @@ public class PersonListActivity extends AppCompatActivity {
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(persons));
+    }
+
+    private Response.Listener<Person[]> createMyReqSuccessListener() {
+        return new Response.Listener<Person[]>() {
+            @Override
+            public void onResponse(Person[] response) {
+                System.out.println("Ik krijg een success");
+                System.out.println(response);
+//                for(Integer i = 0; i < response.length; i++) {
+//                    System.out.println(response[i].getFirstName());
+//                    System.out.println(response[i].getLastName());
+//                    System.out.println(response[i].getBirthDate());
+//                }
+            }
+        };
+    }
+
+    private Response.ErrorListener createMyReqErrorListener() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Ik krijg een error");
+                System.out.println(error.getMessage());
+            }
+        };
     }
 
     public class SimpleItemRecyclerViewAdapter
@@ -136,7 +205,9 @@ public class PersonListActivity extends AppCompatActivity {
         }
 
         @Override
-        public int getItemCount() { return mPersons.size(); }
+        public int getItemCount() {
+            return mPersons.size();
+        }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;

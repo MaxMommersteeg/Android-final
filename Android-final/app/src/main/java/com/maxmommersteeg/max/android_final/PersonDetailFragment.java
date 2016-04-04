@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.maxmommersteeg.max.android_final.Model.Person;
+import com.maxmommersteeg.max.android_final.model.Person;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
