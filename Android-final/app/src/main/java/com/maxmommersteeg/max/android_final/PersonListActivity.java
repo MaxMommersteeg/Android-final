@@ -23,6 +23,7 @@ import com.maxmommersteeg.max.android_final.model.Person;
 import com.maxmommersteeg.max.android_final.toolbox.GsonRequest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ import java.util.List;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class PersonListActivity extends AppCompatActivity {
+public class PersonListActivity extends BaseActivity {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -42,15 +43,8 @@ public class PersonListActivity extends AppCompatActivity {
     private boolean mTwoPane;
     private ArrayList<Person> persons;
 
-    public static final String PREFERENCE_FILE = "PREFERENCE_FILE";
-
-    private SharedPreferences settings;
-    private SharedPreferences.Editor settingEditor;
-
     public PersonListActivity() {
-        //Initliaze private variables
-//        settings = getSharedPreferences(PREFERENCE_FILE, 0);
-//        settingEditor = settings.edit();
+
     }
 
     @Override
@@ -63,18 +57,16 @@ public class PersonListActivity extends AppCompatActivity {
         RequestQueue queue = VolleyService.getRequestQueue();
         GsonRequest<Person[]> personRequest = new GsonRequest<Person[]>(
                 Request.Method.GET,
-                "https://api.myjson.com/bins/2orte",
+                BASE_API_URL,
                 Person[].class,
                 new Response.Listener<Person[]>() {
                     @Override
                     public void onResponse(Person[] response) {
                         System.out.println("Success");
-                        for(Integer i = 0; i < response.length; i++) {
-                            System.out.println(response[i].getFirstName());
-                            System.out.println(response[i].getLastName());
-                            System.out.println(response[i].getFullName());
-                            System.out.println(response[i].getBirthDate());
-                        }
+                        persons = new ArrayList<>(Arrays.asList(response));
+                        View recyclerView = findViewById(R.id.person_list);
+                        assert recyclerView != null;
+                        setupRecyclerView((RecyclerView) recyclerView);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -86,85 +78,25 @@ public class PersonListActivity extends AppCompatActivity {
         );
         queue.add(personRequest);
 
-
-        //TODO: Change for API instead of hardcoded
-        //Create Persons
-        ArrayList<Person> personlist = new ArrayList<>();
-        personlist.add(new Person() {{
-            setPersonId(1);
-            setFirstName("Max");
-            setLastName("Mommersteeg");
-        }});
-        personlist.add(new Person() {{
-            setPersonId(2);
-            setFirstName("Anouk");
-            setLastName("Mommersteeg");
-        }});
-        personlist.add(new Person() {{
-            setPersonId(3);
-            setFirstName("Tim");
-            setLastName("Mommersteeg");
-        }});
-
-        //Set Locations
-        personlist.get(0).setCurrentLocation(51.692512, 5.177475);
-        personlist.get(1).setCurrentLocation(52.692512, 6.177475);
-        personlist.get(2).setCurrentLocation(53.692512, 7.177475);
-
-        persons = personlist;
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        View recyclerView = findViewById(R.id.person_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
-
         if (findViewById(R.id.person_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
             mTwoPane = true;
         }
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(persons));
+        recyclerView.setAdapter(new SimplePersonRecyclerViewAdapter(persons));
     }
 
-    private Response.Listener<Person[]> createMyReqSuccessListener() {
-        return new Response.Listener<Person[]>() {
-            @Override
-            public void onResponse(Person[] response) {
-                System.out.println("Ik krijg een success");
-                System.out.println(response);
-//                for(Integer i = 0; i < response.length; i++) {
-//                    System.out.println(response[i].getFirstName());
-//                    System.out.println(response[i].getLastName());
-//                    System.out.println(response[i].getBirthDate());
-//                }
-            }
-        };
-    }
-
-    private Response.ErrorListener createMyReqErrorListener() {
-        return new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("Ik krijg een error");
-                System.out.println(error.getMessage());
-            }
-        };
-    }
-
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    public class SimplePersonRecyclerViewAdapter
+            extends RecyclerView.Adapter<SimplePersonRecyclerViewAdapter.ViewHolder> {
 
         private final List<Person> mPersons;
 
-        public SimpleItemRecyclerViewAdapter(List<Person> items) {
+        public SimplePersonRecyclerViewAdapter(List<Person> items) {
             mPersons = items;
         }
 
@@ -206,7 +138,7 @@ public class PersonListActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return mPersons.size();
+            return mPersons == null ? 0 : mPersons.size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {

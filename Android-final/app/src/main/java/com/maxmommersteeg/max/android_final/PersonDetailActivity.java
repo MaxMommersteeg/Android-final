@@ -21,6 +21,7 @@ import com.maxmommersteeg.max.android_final.model.Person;
  */
 public class PersonDetailActivity extends AppCompatActivity {
 
+    private Integer personId;
     private Person person;
 
     @Override
@@ -31,7 +32,7 @@ public class PersonDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Retrieve personId
-        Integer personId = getIntent().getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1);
+        personId = getIntent().getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1);
         //Check if the id is valid
         if(personId == -1) {
             Toast.makeText(this, "Invalid Person ID", Toast.LENGTH_LONG).show();
@@ -100,11 +101,5 @@ public class PersonDetailActivity extends AppCompatActivity {
         Intent intent = new Intent(context, PersonMapActivity.class);
         intent.putExtra(PersonMapFragment.ARG_PERSON_ID, getIntent().getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1));
         context.startActivity(intent);
-
-        //Showing a dialog
-        //AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //builder.setMessage("This is the message").setTitle("This is the title");
-        //AlertDialog dialog = builder.create();
-        //dialog.show();
     }
 }
