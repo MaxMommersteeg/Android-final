@@ -44,16 +44,16 @@ public class PersonListActivity extends AppCompatActivity {
     private SharedPreferences settings;
     private SharedPreferences.Editor settingEditor;
 
-    public PersonListActivity() {
-        //Initliaze private variables
-//        settings = getSharedPreferences(PREFERENCE_FILE, 0);
-//        settingEditor = settings.edit();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_list);
+
+        //Local settings
+        SharedPreferences settings = getSharedPreferences(PREFERENCE_FILE, 0);
+        SharedPreferences.Editor settingEditor = settings.edit();
+
+        settingEditor.putInt("mapDistance", 100);
 
         //TODO: Change for API instead of hardcoded
         //Create Persons
