@@ -1,25 +1,29 @@
 package com.maxmommersteeg.max.android_final;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.maxmommersteeg.max.android_final.Model.Person;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.maxmommersteeg.max.android_final.app.VolleyService;
+import com.maxmommersteeg.max.android_final.model.Person;
+import com.maxmommersteeg.max.android_final.toolbox.GsonRequest;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,7 +34,7 @@ import java.util.List;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class PersonListActivity extends AppCompatActivity {
+public class PersonListActivity extends BaseActivity {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -43,6 +47,10 @@ public class PersonListActivity extends AppCompatActivity {
 
     private SharedPreferences settings;
     private SharedPreferences.Editor settingEditor;
+    
+    public PersonListActivity() {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,34 +76,53 @@ public class PersonListActivity extends AppCompatActivity {
         personlist.get(2).setCurrentLocation(53.692512, 7.177475);
 
         persons = personlist;
+=======
+        // Get persons using API (Volley)
+        VolleyService.init(getApplicationContext());
+        RequestQueue queue = VolleyService.getRequestQueue();
+        GsonRequest<Person[]> personRequest = new GsonRequest<Person[]>(
+                Request.Method.GET,
+                BASE_API_URL,
+                Person[].class,
+                new Response.Listener<Person[]>() {
+                    @Override
+                    public void onResponse(Person[] response) {
+                        System.out.println("Success");
+                        persons = new ArrayList<>(Arrays.asList(response));
+                        View recyclerView = findViewById(R.id.person_list);
+                        assert recyclerView != null;
+                        setupRecyclerView((RecyclerView) recyclerView);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Error");
+                System.out.println(error.getMessage());
+            }
+        }
+        );
+        queue.add(personRequest);
+>>>>>>> origin/master
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        View recyclerView = findViewById(R.id.person_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
-
         if (findViewById(R.id.person_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
             mTwoPane = true;
         }
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(persons));
+        recyclerView.setAdapter(new SimplePersonRecyclerViewAdapter(persons));
     }
 
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    public class SimplePersonRecyclerViewAdapter
+            extends RecyclerView.Adapter<SimplePersonRecyclerViewAdapter.ViewHolder> {
 
         private final List<Person> mPersons;
 
-        public SimpleItemRecyclerViewAdapter(List<Person> items) {
+        public SimplePersonRecyclerViewAdapter(List<Person> items) {
             mPersons = items;
         }
 
@@ -136,7 +163,9 @@ public class PersonListActivity extends AppCompatActivity {
         }
 
         @Override
-        public int getItemCount() { return mPersons.size(); }
+        public int getItemCount() {
+            return mPersons == null ? 0 : mPersons.size();
+        }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;

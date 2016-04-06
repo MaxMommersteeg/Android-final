@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.maxmommersteeg.max.android_final">
+
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDPKK3p09wzx6xYujgeukPh-vKB9V4Wo4s"/>
+            android:value="AIzaSyDPKK3p09wzx6xYujgeukPh-vKB9V4Wo4s" />
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -38,5 +42,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.maxmommersteeg.max.android_final.PersonDetailActivity" />
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".PersonListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.maxmommersteeg.max.android_final.PersonListActivity" />
+        </activity>
     </application>
+
 </manifest>

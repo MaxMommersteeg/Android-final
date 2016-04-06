@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.maxmommersteeg.max.android_final.Model.Person;
+import com.maxmommersteeg.max.android_final.model.Person;
 
 /**
  * An activity representing a single Person detail screen. This
@@ -22,6 +21,7 @@ import com.maxmommersteeg.max.android_final.Model.Person;
  */
 public class PersonDetailActivity extends AppCompatActivity {
 
+    private Integer personId;
     private Person person;
 
     @Override
@@ -32,7 +32,7 @@ public class PersonDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Retrieve personId
-        Integer personId = getIntent().getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1);
+        personId = getIntent().getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1);
         //Check if the id is valid
         if(personId == -1) {
             Toast.makeText(this, "Invalid Person ID", Toast.LENGTH_LONG).show();
@@ -47,7 +47,6 @@ public class PersonDetailActivity extends AppCompatActivity {
                 Context context = v.getContext();
                 Intent intent = new Intent(context, PersonMapActivity.class);
                 intent.putExtra(PersonMapFragment.ARG_PERSON_ID, getIntent().getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1));
-
                 context.startActivity(intent);
             }
         });
@@ -94,5 +93,13 @@ public class PersonDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void ShowOnMap(View view) {
+        // redirect user to map
+        Context context = view.getContext();
+        Intent intent = new Intent(context, PersonMapActivity.class);
+        intent.putExtra(PersonMapFragment.ARG_PERSON_ID, getIntent().getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1));
+        context.startActivity(intent);
     }
 }

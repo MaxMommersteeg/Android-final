@@ -1,19 +1,30 @@
-package com.maxmommersteeg.max.android_final.Model;
+package com.maxmommersteeg.max.android_final.model;
 
 import java.util.Date;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Max on 3-3-2016.
  */
 public class Person {
-
+    @SerializedName("personId")
+    @Expose
     private Integer personId;
-
+    @SerializedName("firstName")
+    @Expose
     private String firstName;
+    @SerializedName("middleName")
+    @Expose
     private String middleName;
+    @SerializedName("lastName")
+    @Expose
     private String lastName;
+    @SerializedName("birthDate")
+    @Expose
     private Date birthDate;
-
+    @SerializedName("currentLocation")
+    @Expose
     private Location currentLocation;
 
     public Person() {

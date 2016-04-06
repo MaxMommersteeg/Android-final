@@ -2,27 +2,29 @@ package com.maxmommersteeg.max.android_final;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.maxmommersteeg.max.android_final.Model.Location;
-import com.maxmommersteeg.max.android_final.Model.Person;
+import com.maxmommersteeg.max.android_final.app.VolleyService;
+import com.maxmommersteeg.max.android_final.model.Person;
+import com.maxmommersteeg.max.android_final.toolbox.GsonRequest;
 
-import java.util.Iterator;
-
-public class PersonMapFragment extends Fragment implements
+public class PersonMapFragment extends BaseFragment implements
         OnMapReadyCallback {
 
-    public static final String ARG_PERSON_ID = "ARG_PERSON_ID";
-
+    private Integer personId;
     private Person person;
 
     private LatLng currentLatLng;
@@ -44,25 +46,45 @@ public class PersonMapFragment extends Fragment implements
             return;
 
         //Retrieve personId
-        Integer personId = getArguments().getInt(ARG_PERSON_ID);
+        personId = getArguments().getInt(ARG_PERSON_ID);
         System.out.println("PMF: " + String.valueOf(personId));
 
-        Person p = new Person();
-        p.setFirstName("Max");
-        p.setLastName("Mommersteeg");
-
-        //Load location by id here
-        //TODO: hardcoded to API
-        p.setCurrentLocation(51.692398, 5.177454); // (Kerkstraat 16, Nieuwkuijk)
-        person = p;
-
-        currentLatLng = new LatLng(person.getCurrentLocation().getLatitude(), person.getCurrentLocation().getLongitude());
+        // Get persons using API (Volley)
+        VolleyService.init(getActivity().getApplicationContext());
+        RequestQueue queue = VolleyService.getRequestQueue();
+        GsonRequest<Person[]> personRequest = new GsonRequest<Person[]>(
+                Request.Method.GET,
+                BASE_API_URL,
+                Person[].class,
+                new Response.Listener<Person[]>() {
+                    @Override
+                    public void onResponse(Person[] response) {
+                        System.out.println("Success");
+                        person = response[personId];
+                        currentLatLng = new LatLng(person.getCurrentLocation().getLatitude(), person.getCurrentLocation().getLongitude());
+                        Fragment currentFragment = getFragmentManager().findFragmentById(R.id.person_map_container);
+                        FragmentTransaction fragTransaction = getFragmentManager().beginTransaction();
+                        fragTransaction.detach(currentFragment);
+                        fragTransaction.attach(currentFragment);
+                        fragTransaction.commit();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Error");
+                System.out.println(error.getMessage());
+            }
+        }
+        );
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.person_map, container, false);
+
+        if(person == null)
+            return rootView;
 
         //Get Google map
         googleMap = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.googlemap);

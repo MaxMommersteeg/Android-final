@@ -4,17 +4,25 @@ import android.app.Activity;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.maxmommersteeg.max.android_final.Model.Person;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.maxmommersteeg.max.android_final.app.VolleyService;
+import com.maxmommersteeg.max.android_final.model.Person;
+import com.maxmommersteeg.max.android_final.toolbox.GsonRequest;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * A fragment representing a single Person detail screen.
@@ -22,16 +30,11 @@ import java.util.Locale;
  * in two-pane mode (on tablets) or a {@link PersonDetailActivity}
  * on handsets.
  */
-public class PersonDetailFragment extends Fragment {
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
-    public static final String ARG_PERSON_ID = "ARG_PERSON_ID";
-
+public class PersonDetailFragment extends BaseFragment {
     /*
     * Used data object
     */
+    private Integer personId;
     private Person person;
 
     /**
@@ -53,22 +56,35 @@ public class PersonDetailFragment extends Fragment {
         if(!getArguments().containsKey(ARG_PERSON_ID))
             return;
 
-        //Load person by id here
-        //TODO: hardcoded to API
-        Person p = new Person();
-        p.setFirstName("Max");
-        p.setLastName("Mommersteeg");
+        personId = getArguments().getInt(ARG_PERSON_ID);
 
-        //Set birthdate
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            Date d = sdf.parse("01/02/1994");
-            p.setBirthDate(d);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        // Get persons using API (Volley)
+        VolleyService.init(getActivity().getApplicationContext());
+        RequestQueue queue = VolleyService.getRequestQueue();
+        GsonRequest<Person[]> personRequest = new GsonRequest<Person[]>(
+                Request.Method.GET,
+                BASE_API_URL,
+                Person[].class,
+                new Response.Listener<Person[]>() {
+                    @Override
+                    public void onResponse(Person[] response) {
+                        System.out.println("Success");
+                        person = response[personId];
+                        Fragment currentFragment = getFragmentManager().findFragmentById(R.id.person_detail_container);
+                        FragmentTransaction fragTransaction = getFragmentManager().beginTransaction();
+                        fragTransaction.detach(currentFragment);
+                        fragTransaction.attach(currentFragment);
+                        fragTransaction.commit();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Error");
+                System.out.println(error.getMessage());
+            }
         }
-        p.setCurrentLocation(51.692512, 5.177475);
-        person = p;
+        );
+        queue.add(personRequest);
     }
 
     @Override
@@ -96,7 +112,6 @@ public class PersonDetailFragment extends Fragment {
         if(appBarLayout != null) {
             appBarLayout.setTitle(person.getFullName());
         }
-
         return rootView;
     }
 }

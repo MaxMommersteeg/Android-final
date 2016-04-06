@@ -13,7 +13,9 @@ import android.view.MenuItem;
  * item details are presented side-by-side with a list of items
  * in a {@link PersonListActivity}.
  */
-public class PersonMapActivity extends AppCompatActivity {
+public class PersonMapActivity extends BaseActivity {
+
+    private Integer personId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +31,7 @@ public class PersonMapActivity extends AppCompatActivity {
         }
 
         Intent receivedIntent = getIntent();
-        int personId = receivedIntent.getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1);
+        personId = receivedIntent.getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1);
         System.out.println("PMA: " + String.valueOf(personId));
 
         // savedInstanceState is non-null when there is fragment state
@@ -58,12 +60,6 @@ public class PersonMapActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
             navigateUpTo(new Intent(this, PersonListActivity.class));
             return true;
         }
