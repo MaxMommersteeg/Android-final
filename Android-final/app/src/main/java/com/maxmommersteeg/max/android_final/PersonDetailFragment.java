@@ -110,9 +110,14 @@ public class PersonDetailFragment extends BaseFragment {
                 mPreferenceEditor.putString(ALIAS_PREFERENCE_KEY + person.getPersonId().toString(), alias);
                 mPreferenceEditor.apply();
 
-                // Update list for tables
-                PersonListActivity pla = (PersonListActivity) getActivity();
-                pla.LoadPersonList();
+                try {
+                    // Update list for tables
+                    PersonListActivity pla = (PersonListActivity) getActivity();
+                    pla.LoadPersonList();
+                } catch (Exception ex) {
+                    System.out.println(ex);
+                }
+
 
                 AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
                 alertDialog.setTitle("Alias saved");

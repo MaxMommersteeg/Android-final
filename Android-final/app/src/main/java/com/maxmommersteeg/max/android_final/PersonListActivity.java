@@ -2,11 +2,13 @@ package com.maxmommersteeg.max.android_final;
 
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +25,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.maxmommersteeg.max.android_final.app.VolleyService;
+import com.maxmommersteeg.max.android_final.helper.Connectivity;
 import com.maxmommersteeg.max.android_final.model.Person;
 import com.maxmommersteeg.max.android_final.toolbox.GsonRequest;
 
@@ -59,6 +62,22 @@ public class PersonListActivity extends BaseActivity {
     }
 
     public void LoadPersonList() {
+
+        // Check internet connection
+        if(!Connectivity.isOnline()) {
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle("No internet");
+            alertDialog.setMessage("Make sure you have a working internet connection and press 'Retry'");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Retry",
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    LoadPersonList();
+                    dialog.dismiss();
+                    return;
+                }
+            });
+            alertDialog.show();
+        }
         // Get persons using API (Volley)
         VolleyService.init(getApplicationContext());
         RequestQueue queue = VolleyService.getRequestQueue();
@@ -69,8 +88,9 @@ public class PersonListActivity extends BaseActivity {
                 new Response.Listener<Person[]>() {
                     @Override
                     public void onResponse(Person[] response) {
-                        System.out.println("Success");
+                        System.out.println("Get Persons succeeded");
                         persons = new ArrayList<>(Arrays.asList(response));
+                        // Bind persons to recycle view
                         View recyclerView = findViewById(R.id.person_list);;
                         assert recyclerView != null;
                         setupRecyclerView((RecyclerView) recyclerView);
@@ -106,8 +126,10 @@ public class PersonListActivity extends BaseActivity {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mPerson = mPersons.get(position);
             holder.mIdView.setText(String.valueOf(mPersons.get(position).getPersonId()));
+            // Retrieve alias is possible
             mPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String alias = mPreferences.getString(ALIAS_PREFERENCE_KEY + mPersons.get(position).getPersonId().toString(), "");
+            // If alias exists, add it to the content
             holder.mContentView.setText(alias == "" ? mPersons.get(position).getFirstName() : mPersons.get(position).getFirstName() + " (" + alias + ")");
             holder.mLatitudeView.setText(String.valueOf(mPersons.get(position).getCurrentLocation().getLatitude()));
             holder.mLongitudeView.setText(String.valueOf(mPersons.get(position).getCurrentLocation().getLongitude()));

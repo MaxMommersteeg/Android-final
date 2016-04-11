@@ -5,7 +5,6 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/cvDetails">
@@ -13,8 +12,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
         android:paddingLeft="16dp">
 
     <ImageView
@@ -28,7 +27,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:paddingLeft="10dp"
         android:layout_toRightOf="@+id/icon"/>
 
     <TextView
@@ -36,7 +34,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:paddingLeft="10dp"
         android:layout_toRightOf="@+id/id"/>
 
     <TextView
