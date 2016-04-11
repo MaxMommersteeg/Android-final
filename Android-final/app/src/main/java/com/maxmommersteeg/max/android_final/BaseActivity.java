@@ -18,6 +18,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected static final String ARG_PERSON_OBJECT = "ARG_PERSON_OBJECT";
     protected static final String ALIAS_PREFERENCE_KEY = "ALIAS_PREFERENCE_KEY";
 
+
     protected void showAlert(String msg) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getResources().getString(R.string.app_name))

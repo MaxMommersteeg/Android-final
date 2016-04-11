@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.maxmommersteeg.max.android_final.model.Person;
 
@@ -32,19 +33,16 @@ public class PersonMapActivity extends BaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Intent receivedIntent = getIntent();
-        person = (Person) receivedIntent.getExtras().getSerializable(ARG_PERSON_OBJECT);
+        // Retrieve person
+        person = (Person) getIntent().getExtras().getSerializable(ARG_PERSON_OBJECT);
+        // Check if person is valid
+        if(person == null) {
+            Toast.makeText(this, "Invalid Person", Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
         System.out.println("PMA: " + String.valueOf(person.getPersonId()));
 
-        // savedInstanceState is non-null when there is fragment state
-        // saved from previous configurations of this activity
-        // (e.g. when rotating the screen from portrait to landscape).
-        // In this case, the fragment will automatically be re-added
-        // to its container so we don't need to manually add it.
-        // For more information, see the Fragments API guide at:
-        //
-        // http://developer.android.com/guide/components/fragments.html
-        //
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.

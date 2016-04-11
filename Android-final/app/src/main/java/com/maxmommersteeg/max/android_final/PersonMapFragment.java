@@ -1,6 +1,8 @@
 package com.maxmommersteeg.max.android_final;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -38,13 +40,12 @@ public class PersonMapFragment extends BaseFragment implements
         super.onCreate(savedInstanceState);
 
         //Check if arguments exist
-        if (getArguments() == null)
+        if(getArguments() == null)
             return;
         //Check if we received an objectid for the person
-        if(!getArguments().containsKey(ARG_PERSON_OBJECT))
+        if(!getArguments().containsKey(ARG_PERSON_OBJECT)) {
             return;
-
-        //Retrieve personId
+        }
         person = (Person) getArguments().getSerializable(ARG_PERSON_OBJECT);
         System.out.println("PMF: " + String.valueOf(person.getPersonId()));
     }
@@ -70,9 +71,15 @@ public class PersonMapFragment extends BaseFragment implements
     public void onMapReady(GoogleMap map) {
         if(map == null)
             return;
-        map.addMarker(new MarkerOptions().position(currentLatLng).title(person.getFullName()));
 
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15));
+        MarkerOptions mMarkerOptions = new MarkerOptions();
+        mMarkerOptions.position(new LatLng(person.getCurrentLocation().getLatitude(), person.getCurrentLocation().getLongitude()));
+
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        String alias = mPreferences.getString(ALIAS_PREFERENCE_KEY + person.getPersonId().toString(), "");
+        mMarkerOptions.title(alias == "" ? person.getFullName() : person.getFullName() + " (" + alias + ")");
+        map.addMarker(mMarkerOptions);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(mMarkerOptions.getPosition(), 15));
         // Zoom in, animating the camera.
         map.animateCamera(CameraUpdateFactory.zoomIn());
         // Zoom out to zoom level 10, animating with a duration of 2 seconds.

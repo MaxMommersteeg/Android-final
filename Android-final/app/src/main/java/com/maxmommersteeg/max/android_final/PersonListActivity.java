@@ -30,7 +30,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PersonListActivity extends BaseActivity {
-
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -38,39 +37,15 @@ public class PersonListActivity extends BaseActivity {
     private boolean mTwoPane;
     private ArrayList<Person> persons;
 
-    public static final String PREFERENCE_FILE = "PREFERENCE_FILE";
-
-    private SharedPreferences settings;
-    private SharedPreferences.Editor settingEditor;
-    
-    public PersonListActivity() {
-
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_list);
 
         //Local settings
-        SharedPreferences settings = getSharedPreferences(PREFERENCE_FILE, 0);
-        SharedPreferences.Editor settingEditor = settings.edit();
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        mPreferenceEditor = mPreferences.edit();
 
-        settingEditor.putInt("mapDistance", 100);
-
-        //TODO: Change for API instead of hardcoded
-        //Create Persons
-        ArrayList<Person> personlist = new ArrayList<>();
-        personlist.add(new Person() {{ setPersonId(1); setFirstName("Max"); setLastName("Mommersteeg");}});
-        personlist.add(new Person() {{ setPersonId(2); setFirstName("Anouk"); setLastName("Mommersteeg");}});
-        personlist.add(new Person() {{ setPersonId(3); setFirstName("Tim"); setLastName("Mommersteeg");}});
-
-        //Set Locations
-        personlist.get(0).setCurrentLocation(51.692512, 5.177475);
-        personlist.get(1).setCurrentLocation(52.692512, 6.177475);
-        personlist.get(2).setCurrentLocation(53.692512, 7.177475);
-
-        persons = personlist;
         // Get persons using API (Volley)
         VolleyService.init(getApplicationContext());
         RequestQueue queue = VolleyService.getRequestQueue();
@@ -130,7 +105,9 @@ public class PersonListActivity extends BaseActivity {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mPerson = mPersons.get(position);
             holder.mIdView.setText(String.valueOf(mPersons.get(position).getPersonId()));
-            holder.mContentView.setText(mPersons.get(position).getFirstName());
+            mPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String alias = mPreferences.getString(ALIAS_PREFERENCE_KEY + mPersons.get(position).getPersonId().toString(), "");
+            holder.mContentView.setText(alias == "" ? mPersons.get(position).getFirstName() : mPersons.get(position).getFirstName() + " (" + alias + ")");
             holder.mLatitudeView.setText(String.valueOf(mPersons.get(position).getCurrentLocation().getLatitude()));
             holder.mLongitudeView.setText(String.valueOf(mPersons.get(position).getCurrentLocation().getLongitude()));
             holder.mView.setOnClickListener(new View.OnClickListener() {

@@ -35,9 +35,9 @@ public class PersonDetailActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
-        //Retrieve personId
+        // Retrieve person
         person = (Person) getIntent().getExtras().getSerializable(ARG_PERSON_OBJECT);
-        //Check if the id is valid
+        // Check if person is valid
         if(person == null) {
             Toast.makeText(this, "Invalid Person", Toast.LENGTH_LONG).show();
             finish();

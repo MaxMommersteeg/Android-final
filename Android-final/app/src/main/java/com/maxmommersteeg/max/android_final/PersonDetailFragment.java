@@ -42,9 +42,6 @@ public class PersonDetailFragment extends BaseFragment {
     */
     private Person person;
 
-    private SharedPreferences mPreferences;
-    private SharedPreferences.Editor mPreferenceEditor;
-
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
