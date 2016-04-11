@@ -63,21 +63,21 @@ public class PersonListActivity extends BaseActivity {
 
     public void LoadPersonList() {
 
-        // Check internet connection
-        if(!Connectivity.isOnline()) {
-            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-            alertDialog.setTitle("No internet");
-            alertDialog.setMessage("Make sure you have a working internet connection and press 'Retry'");
-            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Retry",
-            new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    LoadPersonList();
-                    dialog.dismiss();
-                    return;
-                }
-            });
-            alertDialog.show();
-        }
+//        // Check internet connection
+//        if(!Connectivity.isOnline()) {
+//            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+//            alertDialog.setTitle("No internet");
+//            alertDialog.setMessage("Make sure you have a working internet connection and press 'Retry'");
+//            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Retry",
+//            new DialogInterface.OnClickListener() {
+//                public void onClick(DialogInterface dialog, int which) {
+//                    LoadPersonList();
+//                    dialog.dismiss();
+//                    return;
+//                }
+//            });
+//            alertDialog.show();
+//        }
         // Get persons using API (Volley)
         VolleyService.init(getApplicationContext());
         RequestQueue queue = VolleyService.getRequestQueue();
