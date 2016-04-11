@@ -21,8 +21,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:id="@+id/icon"
-        android:src="@mipmap/ic_marker"
-        />
+        android:src="@mipmap/ic_marker" />
 
     <TextView
         android:id="@+id/id"
@@ -40,21 +39,21 @@
         android:paddingLeft="10dp"
         android:layout_toRightOf="@+id/id"/>
 
-        <TextView
-            android:id="@+id/latitude"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceListItem"
-            android:paddingLeft="10dp"
-            android:layout_toRightOf="@+id/content"/>
+    <TextView
+        android:id="@+id/latitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:paddingLeft="10dp"
+        android:layout_below="@+id/content"/>
 
-        <TextView
-            android:id="@+id/Longitude"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceListItem"
-            android:paddingLeft="10dp"
-            android:layout_toRightOf="@+id/latitude"/>
+    <TextView
+        android:id="@+id/Longitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:paddingLeft="10dp"
+        android:layout_below="@+id/latitude"/>
 
     </RelativeLayout>
 

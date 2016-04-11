@@ -133,6 +133,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/person_alias_label"
+        android:hint="@string/aliasHintEditText"
         tools:context="com.maxmommersteeg.max.android_final.PersonDetailFragment" />
 
     <Button

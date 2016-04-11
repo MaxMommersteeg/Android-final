@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -42,10 +43,22 @@ public class PersonListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_list);
 
-        //Local settings
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        mPreferenceEditor = mPreferences.edit();
+        LoadPersonList();
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle(getTitle());
+
+        if (findViewById(R.id.person_detail_container) != null) {
+            mTwoPane = true;
+        }
+    }
+
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+        recyclerView.setAdapter(new SimplePersonRecyclerViewAdapter(persons));
+    }
+
+    public void LoadPersonList() {
         // Get persons using API (Volley)
         VolleyService.init(getApplicationContext());
         RequestQueue queue = VolleyService.getRequestQueue();
@@ -71,18 +84,6 @@ public class PersonListActivity extends BaseActivity {
         }
         );
         queue.add(personRequest);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
-
-        if (findViewById(R.id.person_detail_container) != null) {
-            mTwoPane = true;
-        }
-    }
-
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimplePersonRecyclerViewAdapter(persons));
     }
 
     public class SimplePersonRecyclerViewAdapter

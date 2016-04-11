@@ -2,6 +2,7 @@ package com.maxmommersteeg.max.android_final;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -9,6 +10,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -98,13 +100,30 @@ public class PersonDetailFragment extends BaseFragment {
                 if(person == null) {
                     return;
                 }
-                if(aliasEditText.getText().toString().equals("")) {
+                String alias = aliasEditText.getText().toString();
+                alias = alias.replaceAll("(\\r|\\n)", "");
+                if(alias.equals("")) {
                     return;
                 }
                 mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
                 mPreferenceEditor = mPreferences.edit();
-                mPreferenceEditor.putString(ALIAS_PREFERENCE_KEY + person.getPersonId().toString(), aliasEditText.getText().toString());
+                mPreferenceEditor.putString(ALIAS_PREFERENCE_KEY + person.getPersonId().toString(), alias);
                 mPreferenceEditor.apply();
+
+                // Update list for tables
+                PersonListActivity pla = (PersonListActivity) getActivity();
+                pla.LoadPersonList();
+
+                AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                alertDialog.setTitle("Alias saved");
+                alertDialog.setMessage("Alias (" + alias + ") successfully saved");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
                 System.out.println("Saved alias");
             }
         });
