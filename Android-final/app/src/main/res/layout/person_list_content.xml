@@ -26,6 +26,7 @@
         android:id="@+id/id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
         android:textAppearance="?attr/textAppearanceListItem"
         android:layout_toRightOf="@+id/icon"/>
 
@@ -33,6 +34,7 @@
         android:id="@+id/content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
         android:textAppearance="?attr/textAppearanceListItem"
         android:layout_toRightOf="@+id/id"/>
 
@@ -40,17 +42,21 @@
         android:id="@+id/latitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:paddingLeft="10dp"
+        android:textAppearance="?attr/textAppearanceListItemSmall"
+        android:paddingTop="10dp"
+        android:textColor="@color/colorGray"
         android:layout_below="@+id/content"/>
 
     <TextView
         android:id="@+id/Longitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceListItem"
+        android:textAppearance="?attr/textAppearanceListItemSmall"
+        android:textColor="@color/colorGray"
         android:paddingLeft="10dp"
-        android:layout_below="@+id/latitude"/>
+        android:paddingTop="10dp"
+        android:layout_below="@id/content"
+        android:layout_toRightOf="@+id/latitude"/>
 
     </RelativeLayout>
 
