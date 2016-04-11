@@ -3,10 +3,13 @@ package com.maxmommersteeg.max.android_final.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by Max on 3-3-2016.
  */
-public class Location {
+@SuppressWarnings("serial")
+public class Location implements Serializable {
     @SerializedName("latitude")
     @Expose
     private Double latitude;

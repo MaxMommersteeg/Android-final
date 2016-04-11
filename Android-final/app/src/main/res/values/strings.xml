@@ -3,9 +3,13 @@
     <string name="title_person_detail">Person Detail</string>
     <string name="description">Description</string>
     <string name="location">Location</string>
-    <string name="openmapbutton">Kaart</string>
-    <string name="openmapbuttontext">Toon op kaart</string>
+    <string name="openmapbutton">Map</string>
+    <string name="openmapbuttontext">Show on map</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="alias">Alias</string>
+    <string name="saveAliasButton">Save alias</string>
+
+    <string name="menu_settings">Settings</string>
 
     <!-- Strings related to Settings -->
 

@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.maxmommersteeg.max.android_final.model.Person;
+
 /**
  * An activity representing a single Person detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
@@ -15,7 +17,7 @@ import android.view.MenuItem;
  */
 public class PersonMapActivity extends BaseActivity {
 
-    private Integer personId;
+    private Person person;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +33,8 @@ public class PersonMapActivity extends BaseActivity {
         }
 
         Intent receivedIntent = getIntent();
-        personId = receivedIntent.getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1);
-        System.out.println("PMA: " + String.valueOf(personId));
+        person = (Person) receivedIntent.getExtras().getSerializable(ARG_PERSON_OBJECT);
+        System.out.println("PMA: " + String.valueOf(person.getPersonId()));
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -47,7 +49,7 @@ public class PersonMapActivity extends BaseActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putInt(PersonMapFragment.ARG_PERSON_ID, getIntent().getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1));
+            arguments.putSerializable(ARG_PERSON_OBJECT, person);
             PersonMapFragment pmf = new PersonMapFragment();
             pmf.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

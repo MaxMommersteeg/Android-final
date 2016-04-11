@@ -1,5 +1,6 @@
 package com.maxmommersteeg.max.android_final.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -7,7 +8,8 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by Max on 3-3-2016.
  */
-public class Person {
+@SuppressWarnings("serial")
+public class Person implements Serializable{
     @SerializedName("personId")
     @Expose
     private Integer personId;

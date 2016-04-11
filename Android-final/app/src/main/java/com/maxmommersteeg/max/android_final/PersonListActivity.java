@@ -5,11 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -26,14 +29,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * An activity representing a list of Persons. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link PersonDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
 public class PersonListActivity extends BaseActivity {
 
     /**
@@ -64,7 +59,7 @@ public class PersonListActivity extends BaseActivity {
                     public void onResponse(Person[] response) {
                         System.out.println("Success");
                         persons = new ArrayList<>(Arrays.asList(response));
-                        View recyclerView = findViewById(R.id.person_list);
+                        View recyclerView = findViewById(R.id.person_list);;
                         assert recyclerView != null;
                         setupRecyclerView((RecyclerView) recyclerView);
                     }
@@ -119,7 +114,7 @@ public class PersonListActivity extends BaseActivity {
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(PersonDetailFragment.ARG_PERSON_ID, String.valueOf(holder.mPerson.getPersonId()));
+                        arguments.putSerializable(BaseActivity.ARG_PERSON_OBJECT, holder.mPerson);
                         PersonDetailFragment fragment = new PersonDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -128,8 +123,7 @@ public class PersonListActivity extends BaseActivity {
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, PersonDetailActivity.class);
-                        intent.putExtra(PersonDetailFragment.ARG_PERSON_ID, holder.mPerson.getPersonId());
-
+                        intent.putExtra(ARG_PERSON_OBJECT, holder.mPerson);
                         context.startActivity(intent);
                     }
                 }

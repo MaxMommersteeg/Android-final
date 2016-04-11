@@ -2,13 +2,18 @@ package com.maxmommersteeg.max.android_final;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.maxmommersteeg.max.android_final.model.Person;
@@ -19,9 +24,8 @@ import com.maxmommersteeg.max.android_final.model.Person;
  * item details are presented side-by-side with a list of items
  * in a {@link PersonListActivity}.
  */
-public class PersonDetailActivity extends AppCompatActivity {
+public class PersonDetailActivity extends BaseActivity {
 
-    private Integer personId;
     private Person person;
 
     @Override
@@ -32,10 +36,10 @@ public class PersonDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Retrieve personId
-        personId = getIntent().getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1);
+        person = (Person) getIntent().getExtras().getSerializable(ARG_PERSON_OBJECT);
         //Check if the id is valid
-        if(personId == -1) {
-            Toast.makeText(this, "Invalid Person ID", Toast.LENGTH_LONG).show();
+        if(person == null) {
+            Toast.makeText(this, "Invalid Person", Toast.LENGTH_LONG).show();
             finish();
             return;
         }
@@ -46,7 +50,7 @@ public class PersonDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Context context = v.getContext();
                 Intent intent = new Intent(context, PersonMapActivity.class);
-                intent.putExtra(PersonMapFragment.ARG_PERSON_ID, getIntent().getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1));
+                intent.putExtra(ARG_PERSON_OBJECT, person);
                 context.startActivity(intent);
             }
         });
@@ -70,7 +74,7 @@ public class PersonDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putInt(PersonDetailFragment.ARG_PERSON_ID, getIntent().getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1));
+            arguments.putSerializable(ARG_PERSON_OBJECT, person);
             PersonDetailFragment pdf = new PersonDetailFragment();
             pdf.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -93,13 +97,5 @@ public class PersonDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void ShowOnMap(View view) {
-        // redirect user to map
-        Context context = view.getContext();
-        Intent intent = new Intent(context, PersonMapActivity.class);
-        intent.putExtra(PersonMapFragment.ARG_PERSON_ID, getIntent().getIntExtra(PersonMapFragment.ARG_PERSON_ID, -1));
-        context.startActivity(intent);
     }
 }

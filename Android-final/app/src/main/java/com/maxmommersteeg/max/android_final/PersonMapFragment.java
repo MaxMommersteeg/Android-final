@@ -24,7 +24,6 @@ import com.maxmommersteeg.max.android_final.toolbox.GsonRequest;
 public class PersonMapFragment extends BaseFragment implements
         OnMapReadyCallback {
 
-    private Integer personId;
     private Person person;
 
     private LatLng currentLatLng;
@@ -42,40 +41,12 @@ public class PersonMapFragment extends BaseFragment implements
         if (getArguments() == null)
             return;
         //Check if we received an objectid for the person
-        if(!getArguments().containsKey(ARG_PERSON_ID))
+        if(!getArguments().containsKey(ARG_PERSON_OBJECT))
             return;
 
         //Retrieve personId
-        personId = getArguments().getInt(ARG_PERSON_ID);
-        System.out.println("PMF: " + String.valueOf(personId));
-
-        // Get persons using API (Volley)
-        VolleyService.init(getActivity().getApplicationContext());
-        RequestQueue queue = VolleyService.getRequestQueue();
-        GsonRequest<Person[]> personRequest = new GsonRequest<Person[]>(
-                Request.Method.GET,
-                BASE_API_URL,
-                Person[].class,
-                new Response.Listener<Person[]>() {
-                    @Override
-                    public void onResponse(Person[] response) {
-                        System.out.println("Success");
-                        person = response[personId];
-                        currentLatLng = new LatLng(person.getCurrentLocation().getLatitude(), person.getCurrentLocation().getLongitude());
-                        Fragment currentFragment = getFragmentManager().findFragmentById(R.id.person_map_container);
-                        FragmentTransaction fragTransaction = getFragmentManager().beginTransaction();
-                        fragTransaction.detach(currentFragment);
-                        fragTransaction.attach(currentFragment);
-                        fragTransaction.commit();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("Error");
-                System.out.println(error.getMessage());
-            }
-        }
-        );
+        person = (Person) getArguments().getSerializable(ARG_PERSON_OBJECT);
+        System.out.println("PMF: " + String.valueOf(person.getPersonId()));
     }
 
     @Override

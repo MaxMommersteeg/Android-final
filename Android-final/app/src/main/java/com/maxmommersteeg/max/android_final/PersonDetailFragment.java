@@ -1,6 +1,10 @@
 package com.maxmommersteeg.max.android_final;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -34,8 +40,10 @@ public class PersonDetailFragment extends BaseFragment {
     /*
     * Used data object
     */
-    private Integer personId;
     private Person person;
+
+    private SharedPreferences mPreferences;
+    private SharedPreferences.Editor mPreferenceEditor;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -53,38 +61,10 @@ public class PersonDetailFragment extends BaseFragment {
         if(getArguments() == null)
             return;
         //Check if we received an objectid for the person
-        if(!getArguments().containsKey(ARG_PERSON_ID))
+        if(!getArguments().containsKey(ARG_PERSON_OBJECT)) {
             return;
-
-        personId = getArguments().getInt(ARG_PERSON_ID);
-
-        // Get persons using API (Volley)
-        VolleyService.init(getActivity().getApplicationContext());
-        RequestQueue queue = VolleyService.getRequestQueue();
-        GsonRequest<Person[]> personRequest = new GsonRequest<Person[]>(
-                Request.Method.GET,
-                BASE_API_URL,
-                Person[].class,
-                new Response.Listener<Person[]>() {
-                    @Override
-                    public void onResponse(Person[] response) {
-                        System.out.println("Success");
-                        person = response[personId];
-                        Fragment currentFragment = getFragmentManager().findFragmentById(R.id.person_detail_container);
-                        FragmentTransaction fragTransaction = getFragmentManager().beginTransaction();
-                        fragTransaction.detach(currentFragment);
-                        fragTransaction.attach(currentFragment);
-                        fragTransaction.commit();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("Error");
-                System.out.println(error.getMessage());
-            }
         }
-        );
-        queue.add(personRequest);
+        person = (Person) getArguments().getSerializable(ARG_PERSON_OBJECT);
     }
 
     @Override
@@ -92,14 +72,51 @@ public class PersonDetailFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.person_detail, container, false);
 
-        if(person == null)
+        if (person == null)
             return rootView;
+
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        String alias = mPreferences.getString(ALIAS_PREFERENCE_KEY + person.getPersonId().toString(), "");
+
+        // Bind buttons
+        final Button showOnMapButton = (Button) rootView.findViewById(R.id.showOnMapButton);
+        showOnMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // redirect user to map
+                Context context = v.getContext();
+                Intent intent = new Intent(context, PersonMapActivity.class);
+                intent.putExtra(ARG_PERSON_OBJECT, person);
+                context.startActivity(intent);
+            }
+        });
+
+        final EditText aliasEditText = (EditText) rootView.findViewById(R.id.aliasEditText);
+        aliasEditText.setText(alias);
+        final Button saveAliasButton = (Button) rootView.findViewById(R.id.saveAliasButton);
+        saveAliasButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Arrived in saveAlias");
+                if(person == null) {
+                    return;
+                }
+                if(aliasEditText.getText().toString().equals("")) {
+                    return;
+                }
+                mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                mPreferenceEditor = mPreferences.edit();
+                mPreferenceEditor.putString(ALIAS_PREFERENCE_KEY + person.getPersonId().toString(), aliasEditText.getText().toString());
+                mPreferenceEditor.apply();
+                System.out.println("Saved alias");
+            }
+        });
 
         //Show person detail data
         ((TextView) rootView.findViewById(R.id.person_fullname)).setText(person.getFullName());
         ((TextView) rootView.findViewById(R.id.person_birthdate)).setText(String.valueOf(person.getBirthDate()));
 
-        if(person.getCurrentLocation() == null)
+        if (person.getCurrentLocation() == null)
             return rootView;
 
         ((TextView) rootView.findViewById(R.id.person_location_latitude)).setText(String.valueOf(person.getCurrentLocation().getLatitude()));
@@ -109,7 +126,7 @@ public class PersonDetailFragment extends BaseFragment {
         Activity activity = this.getActivity();
         //Get app bar layout
         CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-        if(appBarLayout != null) {
+        if (appBarLayout != null) {
             appBarLayout.setTitle(person.getFullName());
         }
         return rootView;

@@ -42,15 +42,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.maxmommersteeg.max.android_final.PersonDetailActivity" />
         </activity>
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".PersonListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.maxmommersteeg.max.android_final.PersonListActivity" />
-        </activity>
     </application>
 
 </manifest>
